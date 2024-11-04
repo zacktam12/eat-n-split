@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./index.css"; // Import the CSS file
+import "./index.css";
 
 const initialFriends = [
   {
@@ -25,9 +25,25 @@ const initialFriends = [
 export default function App() {
   const [friends, setFriends] = useState(initialFriends);
   const [selectedFriend, setSelectedFriend] = useState(null);
+  const [newFriendName, setNewFriendName] = useState("");
+  const [newFriendBalance, setNewFriendBalance] = useState(0);
 
   const handleFriendSelect = (friend) => {
     setSelectedFriend(friend);
+  };
+
+  const handleAddFriend = () => {
+    if (newFriendName.trim() !== "") {
+      const newFriend = {
+        id: Date.now(),
+        name: newFriendName,
+        image: `https://i.pravatar.cc/48?u=${Date.now()}`,
+        balance: newFriendBalance,
+      };
+      setFriends([...friends, newFriend]);
+      setNewFriendName("");
+      setNewFriendBalance(0);
+    }
   };
 
   return (
@@ -49,7 +65,25 @@ export default function App() {
             </li>
           ))}
         </ul>
-        <button className="button">Add Friend</button>
+        <div className="form-add-friend">
+          <label htmlFor="new-friend-name">Name:</label>
+          <input
+            type="text"
+            id="new-friend-name"
+            value={newFriendName}
+            onChange={(e) => setNewFriendName(e.target.value)}
+          />
+          <label htmlFor="new-friend-balance">Balance:</label>
+          <input
+            type="number"
+            id="new-friend-balance"
+            value={newFriendBalance}
+            onChange={(e) => setNewFriendBalance(Number(e.target.value))}
+          />
+          <button className="button" onClick={handleAddFriend}>
+            Add Friend
+          </button>
+        </div>
       </div>
 
       <div className="content">

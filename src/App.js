@@ -25,9 +25,58 @@ const initialFriends = [
 ];
 export default function App() {
   return (
-    <div>
-      <initialFriends />
-      hello
+    <div className="app">
+      <div className="sidebar">
+        {" "}
+        <FriendsList />
+        <FormAddFriend />
+      </div>
     </div>
+  );
+}
+function FriendsList() {
+  const friends = initialFriends;
+  return (
+    <ul>
+      {friends.map((friend) => (
+        <Friend friend={friend} key={friend.id} />
+      ))}
+    </ul>
+  );
+}
+function Friend({ friend }) {
+  return (
+    <>
+      <li>
+        <img src={friend.image} alt={"img"}></img>
+        <h3>{friend.name}</h3>
+        {friend.balance < 0 && (
+          <p className="red">
+            you owe {friend.name} {Math.abs(friend.balance)}$
+          </p>
+        )}
+        {friend.balance > 0 && (
+          <p className="green">
+            you owe {friend.name} {Math.abs(friend.balance)}$
+          </p>
+        )}
+        {friend.balance === 0 && <p>you and {friend.name} are even</p>}
+        <Button>Select</Button>
+      </li>
+    </>
+  );
+}
+function Button({ children }) {
+  return <button className="button">{children}</button>;
+}
+function FormAddFriend() {
+  return (
+    <form className="form-add-friend ">
+      <label>👩🏻‍🤝‍👩🏻Friend Name</label>
+      <input type="text" />
+      <label>🖼Image URL</label>
+      <input type="text" />
+      <Button>Add</Button>
+    </form>
   );
 }

@@ -66,6 +66,7 @@ function Friend({ friend }) {
     </>
   );
 }
+//childre prop that can accept any type
 function Button({ children }) {
   return <button className="button">{children}</button>;
 }

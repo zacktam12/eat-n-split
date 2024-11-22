@@ -1,3 +1,4 @@
+import { useState } from "react";
 import "./index.css";
 
 const initialFriends = [
@@ -23,14 +24,27 @@ const initialFriends = [
     age: 35,
   },
 ];
+function Button({ children, onClick }) {
+  return (
+    <button className="button" onClick={onClick}>
+      {children}
+    </button>
+  );
+}
 export default function App() {
+  const [showAddFriend, setShowAddFriend] = useState(false);
+  function HandleShowAddFriend() {
+    setShowAddFriend((show) => !show);
+  }
   return (
     <div className="app">
       <div className="sidebar">
         {" "}
         <FriendsList />
-        <FormAddFriend />
-        <Button>Add friend</Button>
+        {showAddFriend && <FormAddFriend />}
+        <Button onClick={HandleShowAddFriend}>
+          {showAddFriend ? "Close" : "Add friend"}
+        </Button>
       </div>
       <FormSplitBill />
     </div>
@@ -68,10 +82,7 @@ function Friend({ friend }) {
     </>
   );
 }
-//childre prop that can accept any type
-function Button({ children }) {
-  return <button className="button">{children}</button>;
-}
+
 function FormAddFriend() {
   return (
     <form className="form-add-friend ">

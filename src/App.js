@@ -26,6 +26,7 @@ const initialFriends = [
 ];
 
 function Button({ children, onClick }) {
+  // A reusable button component that takes children and an onClick handler
   return (
     <button className="button" onClick={onClick}>
       {children}
@@ -39,19 +40,24 @@ export default function App() {
   const [selectedFriend, setSelectedFriend] = useState(null);
 
   function HandleAddFriend(friend) {
+    // Adds a new friend to the list of friends
     setFriends((friends) => [...friends, friend]);
     setShowAddFriend(false);
   }
 
   function HandleShowAddFriend() {
+    // Toggles the visibility of the add friend form
     setShowAddFriend((show) => !show);
   }
 
   function HandleSelection(friend) {
+    // Selects a friend and hides the add friend form
     setSelectedFriend((cur) => (cur?.id === friend.id ? null : friend));
     setShowAddFriend(false);
   }
+
   function HandleSplitBill(value) {
+    // Splits a bill between the user and the selected friend
     setFriends((friends) =>
       friends.map((friend) =>
         friend.id === selectedFriend.id
@@ -61,10 +67,10 @@ export default function App() {
     );
     setSelectedFriend(null);
   }
+
   return (
     <div className="app">
       <div className="sidebar">
-        {" "}
         <FriendsList
           friends={friends}
           onSelection={HandleSelection}
@@ -79,6 +85,7 @@ export default function App() {
         <FormSplitBill
           selectedFriend={selectedFriend}
           onSplitBill={HandleSplitBill}
+          key={initialFriends.id}
         />
       )}
     </div>
@@ -86,6 +93,7 @@ export default function App() {
 }
 
 function FriendsList({ friends, onSelection, selectedFriend }) {
+  // Renders a list of friends
   return (
     <ul>
       {friends.map((friend) => (
@@ -101,6 +109,7 @@ function FriendsList({ friends, onSelection, selectedFriend }) {
 }
 
 function Friend({ friend, onSelection, selectedFriend }) {
+  // Renders a single friend with their information and a button to select them
   const isSelected = selectedFriend?.id === friend.id;
   return (
     <>
@@ -127,9 +136,12 @@ function Friend({ friend, onSelection, selectedFriend }) {
 }
 
 function FormAddFriend({ onAddFriend }) {
+  // Renders a form to add a new friend
   const [name, setName] = useState();
   const [image, setImage] = useState("https://i.pravatar.cc/48");
+
   function HandleSubmit(e) {
+    // Handles the submission of the add friend form
     e.preventDefault();
 
     if (!name || !image) return;
@@ -147,8 +159,9 @@ function FormAddFriend({ onAddFriend }) {
     setName("");
     setImage("https://i.pravatar.cc/48");
   }
+
   return (
-    <form className="form-add-friend " onSubmit={HandleSubmit}>
+    <form className="form-add-friend" onSubmit={HandleSubmit}>
       <label>👨‍👨 Friend Name </label>
       <input
         type="text"
@@ -167,15 +180,19 @@ function FormAddFriend({ onAddFriend }) {
 }
 
 function FormSplitBill({ selectedFriend, onSplitBill }) {
+  // Renders a form to split a bill between the user and the selected friend
   const [bill, setBill] = useState("");
   const [PaidByUser, setPaidByUser] = useState("");
-  const paidByFriend = bill ? bill - PaidByUser : "";
+  const paidByFriend = bill ? bill - PaidByUser : 0;
   const [whoPaid, setWhopaid] = useState("user");
+
   function HandleSubmit(e) {
+    // Handles the submission of the split bill form
     e.preventDefault();
     if (!bill || !PaidByUser) return;
     onSplitBill(whoPaid === "user" ? paidByFriend : -PaidByUser);
   }
+
   return (
     <form className="form-split-bill" onSubmit={HandleSubmit}>
       <h2>Split a Bill with {selectedFriend.name} </h2>
@@ -198,10 +215,7 @@ function FormSplitBill({ selectedFriend, onSplitBill }) {
       <label>👨‍👩{selectedFriend.name}'s expense</label>
       <input type="text" disabled value={paidByFriend} />
       <label>🤑Who is paying the bill</label>
-      <select
-        value={whoPaid}
-        onChange={(e) => setWhopaid(Number(e.target.value))}
-      >
+      <select value={whoPaid} onChange={(e) => setWhopaid(e.target.value)}>
         <option value="user">You</option>
         <option value="friend">{selectedFriend.name}</option>
       </select>
